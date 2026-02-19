@@ -1,0 +1,42 @@
+﻿  ΓÇó electron-builder  version=26.8.1 os=10.0.26100
+  ΓÇó loaded configuration  file=package.json ("build" field)
+  ΓÇó executing @electron/rebuild  electronVersion=40.6.0 arch=x64 buildFromSource=false workspaceRoot=C:\Users\ASUS\OneDrive - Informatics Institute of Technology\Desktop\GNS Quiz Manager projectDir=./ appDir=./
+  ΓÇó installing native dependencies  arch=x64
+  ΓÇó completed installing native dependencies
+  ΓÇó packaging       platform=win32 arch=x64 electron=40.6.0 appOutDir=dist\win-unpacked
+  ΓÇó searching for node modules  pm=yarn searchDir=C:\Users\ASUS\OneDrive - Informatics Institute of Technology\Desktop\GNS Quiz Manager
+node.exe : (node:16336) 
+[DEP0190] 
+DeprecationWarning: Passing 
+args to a child process 
+with shell option true can 
+lead to security 
+vulnerabilities, as the 
+arguments are not escaped, 
+only concatenated.
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" "C:\U
+sers\ASUS\AppData\Roaming\n 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    + CategoryInfo          
+    : NotSpecified: ((node  
+  :16336) [D...y concaten   
+ ated.:String) [], Remot    
+eException
+    + FullyQualifiedErrorId 
+    : NativeCommandError
+ 
+(Use `node 
+--trace-deprecation ...` to 
+show where the warning was 
+created)
+  ΓÇó searching for node modules  pm=traversal searchDir=C:\Users\ASUS\OneDrive - Informatics Institute of Technology\Desktop\GNS Quiz Manager
+  ΓÇó using manual traversal of node_modules to build dependency tree
+  ΓÇó no node modules returned while searching directories  searchDirectories=[""]
+  ΓÇó updating asar integrity executable resource  executablePath=dist\win-unpacked\GNS Quiz Manager.exe
+  ΓÇó building        target=portable file=dist\GNS-Quiz-Manager-Portable.exe archs=x64
+  ΓÇó signing with signtool.exe  path=dist\GNS-Quiz-Manager-Portable.exe

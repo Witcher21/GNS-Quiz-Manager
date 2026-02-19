@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/x-icon" href="assets/icon.ico"/>
+  <title>GNS Quiz Manager — IT Day</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 950:'#05080f', 900:'#0a0e1a', 800:'#0f1629', 700:'#162040', 600:'#1d2b55' }
+          },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    * { box-sizing: border-box; }
+    body { background: #0a0e1a; font-family: 'Inter', system-ui, sans-serif; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0f1629; }
+    ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
+
+    .nav-link { transition: all .2s ease; }
+    .nav-link.active { background: rgba(245,158,11,.12); color: #f59e0b; border-left: 3px solid #f59e0b; }
+    .nav-link:not(.active):hover { background: rgba(255,255,255,.04); color: #d1d5db; }
+
+    .glass { background: rgba(255,255,255,.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.07); }
+    .card { background: #0f1629; border: 1px solid rgba(255,255,255,.06); border-radius: 1rem; }
+
+    @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .slide-up { animation: slideUp .3s ease forwards; }
+
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .fade-in { animation: fadeIn .25s ease forwards; }
+
+    /* Option buttons */
+    .option-btn { transition: all .18s ease; border: 2px solid rgba(255,255,255,.1); }
+    .option-btn:hover { border-color: #f59e0b; background: rgba(245,158,11,.08); transform: translateX(6px); }
+    .option-btn.selected { border-color: #f59e0b; background: rgba(245,158,11,.15); }
+    .option-btn.correct  { border-color: #10b981; background: rgba(16,185,129,.2) !important; }
+    .option-btn.wrong    { border-color: #ef4444; background: rgba(239,68,68,.2) !important; }
+
+    /* Timer ring */
+    .timer-ring { transition: stroke-dashoffset .9s linear; }
+
+    /* Toast */
+    #toast { transition: all .3s ease; }
+
+    /* Rank badges */
+    .rank-1 { background: linear-gradient(135deg,#f59e0b,#fbbf24); color:#000; }
+    .rank-2 { background: linear-gradient(135deg,#9ca3af,#d1d5db); color:#000; }
+    .rank-3 { background: linear-gradient(135deg,#b45309,#d97706); color:#fff; }
+
+    /* Match card glow on active */
+    .match-active { box-shadow: 0 0 0 2px #f59e0b66, 0 0 20px #f59e0b22; }
+
+    /* Table rows */
+    tr:hover td { background: rgba(255,255,255,.02); }
+
+    @keyframes correctFlash {
+      0%,100% { box-shadow: 0 0 0 0 #10b98100; }
+      50% { box-shadow: 0 0 30px 4px #10b98166; }
+    }
+    @keyframes wrongFlash {
+      0%,100% { box-shadow: 0 0 0 0 #ef444400; }
+      50% { box-shadow: 0 0 30px 4px #ef444466; }
+    }
+    .correct-flash { animation: correctFlash .5s ease 2; }
+    .wrong-flash   { animation: wrongFlash  .5s ease 2; }
+  </style>
+</head>
+<body class="flex min-h-screen text-white">
+
+  <!-- ═══ SIDEBAR ════════════════════════════════════════════════════════════ -->
+  <aside class="fixed top-0 left-0 bottom-0 w-60 bg-navy-800 border-r border-white/5 flex flex-col z-20">
+    <!-- Logo -->
+    <div class="px-5 py-6 border-b border-white/5">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-400 flex items-center justify-center text-black font-black text-xl">🏆</div>
+        <div>
+          <div class="font-bold text-white leading-tight text-sm">GNS Quiz</div>
+          <div class="text-amber-400 text-xs font-semibold">IT Day Manager</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav links -->
+    <nav class="flex-1 p-3 space-y-0.5">
+      <button id="nav-dashboard"   class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400" onclick="navigate('dashboard')">
+        <span class="text-base">🏠</span> Dashboard
+      </button>
+      <button id="nav-teams"       class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400" onclick="navigate('teams')">
+        <span class="text-base">👥</span> Teams
+      </button>
+      <button id="nav-questions"   class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400" onclick="navigate('questions')">
+        <span class="text-base">📝</span> Question Bank
+      </button>
+      <button id="nav-tournament"  class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400" onclick="navigate('tournament')">
+        <span class="text-base">⚔️</span> Tournament
+      </button>
+      <button id="nav-battle"      class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400" onclick="navigate('battle')">
+        <span class="text-base">🎯</span> Battle Arena
+      </button>
+      <button id="nav-leaderboard" class="nav-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400" onclick="navigate('leaderboard')">
+        <span class="text-base">🏅</span> Leaderboard
+      </button>
+    </nav>
+
+    <!-- Bottom -->
+    <div class="p-4 border-t border-white/5 text-xs text-gray-600 text-center">GNS Quiz Manager v1.0</div>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════════════════════════════ -->
+  <main id="app" class="ml-60 flex-1 min-h-screen bg-navy-900 p-8 overflow-y-auto"></main>
+
+  <!-- ═══ MODAL ═════════════════════════════════════════════════════════════ -->
+  <div id="modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div id="modal-box" class="card w-full max-w-xl p-6 slide-up overflow-y-auto max-h-[90vh]"></div>
+  </div>
+
+  <!-- ═══ TOAST ═════════════════════════════════════════════════════════════ -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 opacity-0 pointer-events-none">
+    <div id="toast-inner" class="px-5 py-3 rounded-xl text-sm font-semibold shadow-2xl"></div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

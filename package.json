@@ -1,0 +1,47 @@
+{
+  "name": "gns-quiz-manager",
+  "version": "1.0.0",
+  "description": "GNS School IT Day Quiz Manager",
+  "main": "main.js",
+  "author": "GNS Quiz Manager",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64 --publish=never",
+    "test": "echo \"No tests\" && exit 0"
+  },
+  "build": {
+    "appId": "com.gns.quizmanager",
+    "productName": "GNS Quiz Manager",
+    "copyright": "GNS School IT Day",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "store.js",
+      "index.html",
+      "renderer.js",
+      "assets/**/*",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        { "target": "dir",      "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ],
+      "icon": "assets/icon.ico",
+      "signAndEditExecutable": false,
+      "verifyUpdateCodeSignature": false
+    },
+    "portable": {
+      "artifactName": "GNS-Quiz-Manager-Portable.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^40.6.0",
+    "electron-builder": "^26.8.1"
+  }
+}
